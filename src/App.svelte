@@ -4,7 +4,14 @@
 
   export let appName;
 
-  const meetups = [
+  let title = '';
+  let subtitle = '';
+  let url = '';
+  let address = '';
+  let desc = '';
+  let email = '';
+
+  let meetups = [
     {
       id: 'm1',
       title: 'Coding Bootcamp',
@@ -24,6 +31,21 @@
       contactEmail: 'swim@letusswim.com'
     }
   ];
+
+  function addMeetup() {
+    const newMeetup = {
+      id: Math.random().toString(),
+      title,
+      subtitle,
+      imageUrl: url,
+      description: desc,
+      address,
+      contactEmail: email
+    };
+
+    meetups = [newMeetup, ...meetups];
+  }
+
 </script>
 
 <style>
@@ -35,5 +57,32 @@
 
 <Header {appName} />
 <main>
+  <form on:submit|preventDefault="{addMeetup}">
+    <div class="form-control">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" placeholder="Your title goes here" bind:value="{title}">
+    </div>
+    <div class="form-control">
+      <label for="subtitle">Subtitle</label>
+      <input type="text" name="subtitle" id="subtitle" placeholder="Your subtitle goes here" bind:value="{subtitle}">
+    </div>
+    <div class="form-control">
+      <label for="description">Description</label>
+      <textarea name="description" id="description" rows="3" placeholder="Your description goes here"bind:value="{desc}"></textarea>
+    </div>
+    <div class="form-control">
+      <label for="imageUrl">Image Url</label>
+      <input type="url" name="imageUrl" id="imageUrl" placeholder="Please add image url" bind:value="{url}">
+    </div>
+    <div class="form-control">
+      <label for="address">Address</label>
+      <textarea name="address" id="address" rows="3" placeholder="Your address goes here" bind:value="{address}"></textarea>
+    </div>
+    <div class="form-control">
+      <label for="contactEmail">E-mail</label>
+      <input type="email" name="contactEmail" id="contactEmail" placeholder="Your e-mail Id goes here" bind:value="{email}">
+    </div>
+    <button type="submit">Save</button>
+  </form>
   <MeetupGrid {meetups} />
 </main>
