@@ -1,3 +1,7 @@
+<script>
+  export let appName;
+</script>
+
 <style>
   header {
     position: fixed;
@@ -17,8 +21,13 @@
     font-family: "Roboto Slab", serif;
     margin: 0;
   }
+
+  .capitalize-it {
+    text-transform: capitalize;
+  }
 </style>
 
 <header>
-  <h1>Infinity Meetups</h1>
+  <h1 class="capitalize-it">{appName}</h1>
 </header>
+
