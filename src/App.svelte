@@ -1,6 +1,7 @@
 <script>
   import Header from './UI/Header.svelte';
   import MeetupGrid from './MeetUps/MeetupGrid.svelte';
+  import TextInput from './UI/TextInput.svelte';
 
   export let appName;
 
@@ -53,35 +54,67 @@
     margin-top: 5rem;
   }
 
+  form {
+    width: 30rem;
+    max-width: 90%;
+    margin: auto;
+  }
+
 </style>
 
 <Header {appName} />
 <main>
   <form on:submit|preventDefault="{addMeetup}">
-    <div class="form-control">
-      <label for="title">Title</label>
-      <input type="text" name="title" id="title" placeholder="Your title goes here" bind:value="{title}">
-    </div>
-    <div class="form-control">
-      <label for="subtitle">Subtitle</label>
-      <input type="text" name="subtitle" id="subtitle" placeholder="Your subtitle goes here" bind:value="{subtitle}">
-    </div>
-    <div class="form-control">
-      <label for="description">Description</label>
-      <textarea name="description" id="description" rows="3" placeholder="Your description goes here"bind:value="{desc}"></textarea>
-    </div>
-    <div class="form-control">
-      <label for="imageUrl">Image Url</label>
-      <input type="url" name="imageUrl" id="imageUrl" placeholder="Please add image url" bind:value="{url}">
-    </div>
-    <div class="form-control">
-      <label for="address">Address</label>
-      <textarea name="address" id="address" rows="3" placeholder="Your address goes here" bind:value="{address}"></textarea>
-    </div>
-    <div class="form-control">
-      <label for="contactEmail">E-mail</label>
-      <input type="email" name="contactEmail" id="contactEmail" placeholder="Your e-mail Id goes here" bind:value="{email}">
-    </div>
+    <TextInput 
+      id="title" 
+      label="Title" 
+      value="{title}" 
+      type="text"
+      on:input="{(event) => (title = event.target.value)}" 
+      placeholder="Your title goes here"/>
+
+    <TextInput 
+      id="subtitle" 
+      label="Subtitle" 
+      value="{subtitle}" 
+      type="text"
+      on:input="{(event) => (subtitle = event.target.value)}" 
+      placeholder="Your subtitle goes here"/>
+    
+    <TextInput 
+      id="description" 
+      label="Description" 
+      value="{desc}" 
+      row="3"
+      controlType="textarea"
+      on:input="{(event) => (desc = event.target.value)}" 
+      placeholder="Please add some description"/>
+    
+    <TextInput 
+      id="imageUrl" 
+      label="imageUrl" 
+      value="{url}" 
+      type="url"
+      on:input="{(event) => (url = event.target.value)}" 
+      placeholder="Please add image url"/>
+    
+    <TextInput 
+      id="address" 
+      label="Address" 
+      value="{address}" 
+      row="3"
+      controlType="textarea"
+      on:input="{(event) => (address = event.target.value)}" 
+      placeholder="Your address goes here"/>
+    
+    <TextInput 
+      id="email" 
+      label="email" 
+      value="{email}" 
+      type="email"
+      on:input="{(event) => (email = event.target.value)}" 
+      placeholder="Your e-mail Id goes here"/>
+    
     <button type="submit">Save</button>
   </form>
   <MeetupGrid {meetups} />
