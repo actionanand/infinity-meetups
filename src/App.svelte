@@ -2,6 +2,7 @@
   import Header from './UI/Header.svelte';
   import MeetupGrid from './MeetUps/MeetupGrid.svelte';
   import TextInput from './UI/TextInput.svelte';
+  import Button from './UI/Button.svelte';
 
   export let appName;
 
@@ -115,7 +116,7 @@
       on:input="{(event) => (email = event.target.value)}" 
       placeholder="Your e-mail Id goes here"/>
     
-    <button type="submit">Save</button>
+    <Button type="submit" caption="Save" />
   </form>
   <MeetupGrid {meetups} />
 </main>
