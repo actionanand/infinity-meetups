@@ -84,5 +84,5 @@
     on:input="{(event) => (email = event.target.value)}" 
     placeholder="Your e-mail Id goes here"/>
   
-  <Button type="submit" caption="Save" />
+  <Button type="submit">Save</Button>
 </form>
