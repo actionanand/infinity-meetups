@@ -5,12 +5,17 @@
   import Button from '../UI/Button.svelte';
   import Modal from '../UI/Modal.svelte';
 
+  import { isEmpty } from '../helpers/validation.js';
+
   let title = '';
   let subtitle = '';
   let url = '';
   let address = '';
   let desc = '';
   let email = '';
+  let isTitleValid = false;
+
+  $: isTitleValid = !isEmpty(title);
 
   const dispatch = createEventDispatcher();
 
@@ -44,6 +49,8 @@
       id="title" 
       label="Title" 
       value="{title}" 
+      valid="{isTitleValid}"
+      validityMessage="Please enter a valid title"
       on:input="{(event) => (title = event.target.value)}" 
       placeholder="Your title goes here"/>
 

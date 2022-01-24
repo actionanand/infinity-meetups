@@ -6,14 +6,20 @@
   export let placeholder;
   export let value;
   export let type = 'text';
+  export let valid = true;
+  export let validityMessage = '';
 </script> 
 
 <div class="form-control">
   <label for="{id}">{label}</label>
   {#if controlType === 'textarea'}
-      <textarea name="{id}" id="{id}" rows="{row}" placeholder="{placeholder}" value="{value}" on:input></textarea>
+      <textarea name="{id}" class:invalid="{!valid}" id="{id}" rows="{row}" placeholder="{placeholder}" value="{value}" on:input></textarea>
   {:else}
-      <input type="{type}" name="{id}" id="{id}" placeholder="{placeholder}" value="{value}" on:input>
+      <input type="{type}" name="{id}" class:invalid="{!valid}" id="{id}" placeholder="{placeholder}" value="{value}" on:input>
+  {/if}
+
+  {#if validityMessage && !valid}
+    <p class="error-message">{validityMessage}</p>
   {/if}
 </div>
 
@@ -47,6 +53,16 @@
     padding: 0.5rem 0;
     width: 100%;
     margin: 0.25rem 0;
+  }
+
+  .invalid {
+    border-color: red;
+    background-color: rgb(233, 163, 163);
+  }
+
+  .error-message {
+    color: red;
+    margin: .25rem 0;
   }
 </style>
 
