@@ -1,12 +1,12 @@
 <script>
-  export let controlType;
+  export let controlType = null;
   export let id;
   export let label;
-  export let row;
+  export let row = null;
   export let placeholder;
   export let value;
-  export let type;
-</script>
+  export let type = 'text';
+</script> 
 
 <div class="form-control">
   <label for="{id}">{label}</label>

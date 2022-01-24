@@ -70,7 +70,6 @@
       id="title" 
       label="Title" 
       value="{title}" 
-      type="text"
       on:input="{(event) => (title = event.target.value)}" 
       placeholder="Your title goes here"/>
 
@@ -78,7 +77,6 @@
       id="subtitle" 
       label="Subtitle" 
       value="{subtitle}" 
-      type="text"
       on:input="{(event) => (subtitle = event.target.value)}" 
       placeholder="Your subtitle goes here"/>
     
