@@ -13,13 +13,6 @@
   let address = '';
   let desc = '';
   let email = '';
-  let isTitleValid = false;
-  let isSubtitleValid = false;
-  let isUrlValid = false;
-  let isAddressValid = false;
-  let isDescValid = false;
-  let isEmailValid = false;
-  let isFormValid = false;
 
   $: isTitleValid = !isEmpty(title, 3);
   $: isSubtitleValid = !isEmpty(subtitle, 3);
