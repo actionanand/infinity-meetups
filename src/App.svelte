@@ -5,43 +5,32 @@
   import MeetupGrid from './MeetUps/MeetupGrid.svelte';
   import EditMeetup from './MeetUps/EditMeetup.svelte';
   import Button from './UI/Button.svelte';
+  import MeetupDetail from './MeetUps/MeetupDetail.svelte';
 
   export let appName;
 
   let editMode;
+  let page = 'overview';
+  let pageData = {};
 
   // let meetups;
 
-  function addMeetup(event) {
-    let {
-      title, 
-      subtitle, 
-      desc:description, 
-      address, 
-      url:imageUrl, 
-      email:contactEmail
-    } = event.detail
-    
-    const meetupData = {
-      title,
-      subtitle,
-      imageUrl,
-      description,
-      address,
-      contactEmail
-    };
-
-    meetups.addMeetup(meetupData);
+  function addMeetup() {
     editMode = null;
-  }
-
-  function toggleFavorite(event) {
-    const id = event.detail;
-    meetups.toggleFavorite(id);
   }
 
   function cancelEdit() {
     editMode = null;
+  }
+
+  function showDetails(event) {
+    page = 'details';
+    pageData.id = event.detail;
+  }
+
+  function closeDetails() {
+    page = 'overview';
+    pageData = {};
   }
 
 </script>
@@ -59,11 +48,16 @@
 
 <Header {appName} />
 <main>
-  <div class="meetup-controls">
-    <Button on:click="{() => editMode = 'add'}">New Meetup</Button>
-  </div>
-  {#if editMode === 'add'}
-    <EditMeetup on:save-form-data={addMeetup} on:cancel="{cancelEdit}" />
+  {#if page==='overview'}
+    <div class="meetup-controls">
+      <Button on:click="{() => editMode = 'add'}">New Meetup</Button>
+    </div>
+    {#if editMode === 'add'}
+      <EditMeetup on:save-form-data={addMeetup} on:cancel="{cancelEdit}" />
+    {/if}
+    <MeetupGrid meetups={$meetups} on:show-details="{showDetails}" />
+  {:else}
+    <MeetupDetail id="{pageData.id}" on:close-details="{closeDetails}" />
   {/if}
-  <MeetupGrid meetups={$meetups} on:toggle-favorite="{toggleFavorite}" />
+
 </main>
