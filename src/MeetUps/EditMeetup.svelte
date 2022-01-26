@@ -9,6 +9,8 @@
 
   import { isEmpty, isValidEmail } from '../helpers/validation.js';
 
+  export let id = null;
+
   let title = '';
   let subtitle = '';
   let url = '';
@@ -26,6 +28,20 @@
 
   const dispatch = createEventDispatcher();
 
+  if(id) {
+    const unSub = meetups.subscribe(items => {
+      const meetupToBeEdited = items.find(item => item.id === id);
+      title = meetupToBeEdited.title;
+      subtitle = meetupToBeEdited.subtitle;
+      url = meetupToBeEdited.imageUrl;
+      address = meetupToBeEdited.address;
+      desc = meetupToBeEdited.description;
+      email = meetupToBeEdited.contactEmail;
+    });
+
+    unSub();
+  }
+
   function submitForm() {
     const meetupData = {
       title,
@@ -36,8 +52,11 @@
       contactEmail: email
     };
 
-    meetups.addMeetup(meetupData);
-
+    if(id) {
+      meetups.updateMeetup(id, meetupData);
+    } else {
+      meetups.addMeetup(meetupData);
+    }
     dispatch('save-form-data');
   }
 

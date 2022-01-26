@@ -23,6 +23,6 @@
   {#each meetups as meetup }
     <MeetupItem title={meetup.title} subtitle={meetup.subtitle} description={meetup.description}
       imageUrl={meetup.imageUrl} address={meetup.address} email={meetup.contactEmail} 
-      id={meetup.id} isFav={meetup.isFavorite} on:show-details />
+      id={meetup.id} isFav={meetup.isFavorite} on:show-details on:edit-meetup/>
   {/each}
 </section>
