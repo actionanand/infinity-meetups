@@ -1,26 +1,42 @@
 <script>
   import MeetupItem from './MeetupItem.svelte';
+  import MeetupFilter from './MeetupFilter.svelte';
 
   export let meetups;
+
+  let favsOnly = false;
+
+  $: filteredMeetups = favsOnly ? meetups.filter(m => m.isFavorite) : meetups;
+
+  function selectComponent(event) {
+    favsOnly = event.detail === 'fav-meetup';
+  }
 </script>
 
 <style>
-  section {
+  #meetups {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 1rem;
   }
 
+  #meetup-controls {
+    margin: 1rem;
+  }
+
   @media (min-width: 768px) {
-    section {
+    #meetups {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>
 
+<section id="meetup-controls">
+  <MeetupFilter on:select-component="{selectComponent}" />
+</section>
 <section id="meetups">
-  {#each meetups as meetup }
+  {#each filteredMeetups as meetup }
     <MeetupItem title={meetup.title} subtitle={meetup.subtitle} description={meetup.description}
       imageUrl={meetup.imageUrl} address={meetup.address} email={meetup.contactEmail} 
       id={meetup.id} isFav={meetup.isFavorite} on:show-details on:edit-meetup/>
