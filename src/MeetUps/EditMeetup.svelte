@@ -42,6 +42,10 @@
     unSub();
   }
 
+  function sendingErrorMsg(errorMsg) {
+    dispatch('error-modal', errorMsg)
+  }
+
   function submitForm() {
     const meetupData = {
       title,
@@ -53,7 +57,22 @@
     };
 
     if(id) {
-      meetups.updateMeetup(id, meetupData);
+      fetch(`https://vue-http-exmp-default-rtdb.firebaseio.com/meetups/${id}.json`, {
+        method: 'PATCH',
+        body: JSON.stringify(meetupData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error editting meetup!');
+        }
+        console.log('Meetup editted');
+        meetups.updateMeetup(id, meetupData);
+      }).catch(err => {
+        sendingErrorMsg(err.message);
+        // console.log(err.message);
+      });
     } else {
       fetch('https://vue-http-exmp-default-rtdb.firebaseio.com/meetups.json', {
         method: 'POST',
@@ -70,7 +89,8 @@
         console.log('Meetup added :', data);
         meetups.addMeetup({...meetupData, isFavorite: false, id: data.name});
       }).catch(err => {
-        console.log(err);
+        sendingErrorMsg(err.message);
+        // console.log(err);
       });
     }
     dispatch('save-form-data');
@@ -81,7 +101,17 @@
   }
 
   function onDeleteMeetup() {
-    meetups.deleteMeetup(id);
+    fetch(`https://vue-http-exmp-default-rtdb.firebaseio.com/meetups/${id}.json`, {
+        method: 'DELETE'
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error deleting meetup!');
+        }
+        meetups.deleteMeetup(id);
+      }).catch(err => {
+        // console.log(err);
+        sendingErrorMsg(err.message);
+      });
     dispatch('save-form-data');
   }
 </script>

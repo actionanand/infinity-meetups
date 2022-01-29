@@ -15,10 +15,28 @@
   export let id;
   export let isFav;
 
+  let isLoading = false;
+
   const dispatch = createEventDispatcher();
 
   function onToggleFavorite() {
-    meetups.toggleFavorite(id);
+    isLoading = true;
+    fetch(`https://vue-http-exmp-default-rtdb.firebaseio.com/meetups/${id}.json`, {
+        method: 'PATCH',
+        body: JSON.stringify({ isFavorite: !isFav}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error changing favorite status!');
+        }
+        isLoading = false;
+        meetups.toggleFavorite(id);
+      }).catch(err => {
+        isLoading = false;
+        console.log(err);
+      });
   }
 </script>
 
@@ -74,6 +92,17 @@
   div {
     text-align: right;
   }
+
+  .changing-fav {
+    font: inherit;
+    border: 1px solid #cf0056;
+    background: #cf0056;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.26);
+    cursor: progress;
+  }
 </style>
 
 <article>
@@ -96,13 +125,17 @@
   <footer>
     <!-- <Button href="mailto:{email}">Contact</Button> -->
     <Button mode="outline" type="button" on:click="{dispatch('edit-meetup', id)}">Edit</Button>
-    <Button 
-      type="button" 
-      mode="outline" 
-      color={isFav? null : 'success'}
-      on:click="{onToggleFavorite}">
-      {isFav? 'Unfavorite' : 'Favorite'}
-    </Button>
+    {#if isLoading}
+      <span class="changing-fav">{isFav? 'Unfavoriting' : 'Favoriting' }...</span>
+    {:else}
+      <Button 
+        type="button" 
+        mode="outline" 
+        color={isFav? null : 'success'}
+        on:click="{onToggleFavorite}">
+        {isFav? 'Unfavorite' : 'Favorite'}
+      </Button>
+    {/if}
     <Button type="button" on:click="{() => dispatch('show-details', id)}">Show Details</Button>
   </footer>
 </article>
