@@ -5,6 +5,7 @@
   import MeetupGrid from './MeetUps/MeetupGrid.svelte';
   import EditMeetup from './MeetUps/EditMeetup.svelte';
   import MeetupDetail from './MeetUps/MeetupDetail.svelte';
+  import LoadingSpinner from './UI/LoadingSpinner.svelte';
 
   export let appName;
 
@@ -12,6 +13,7 @@
   let page = 'overview';
   let pageData = {};
   let editedId = null;
+  let isLoading = true;
 
   // let meetups;
 
@@ -28,8 +30,10 @@
         id: key
       });
     }
+    isLoading = false;
     meetups.setMeetups(loadedMeetups);
   }).catch(err => {
+    isLoading = false;
     console.log(err.message);
   });
 
@@ -57,7 +61,6 @@
     editMode = 'edit';
     editedId = event.detail;
   }
-
 </script>
 
 <style>
@@ -73,8 +76,13 @@
     {#if editMode === 'edit'}
       <EditMeetup id={editedId} on:save-form-data={onSaveMeetup} on:cancel="{cancelEdit}" />
     {/if}
-    <MeetupGrid meetups={$meetups} on:show-details="{showDetails}" on:edit-meetup="{onEditMeetup}"
-      on:add-meetup="{() => editMode = 'edit'}"/>
+    
+    {#if isLoading}
+      <LoadingSpinner/>
+    {:else}
+      <MeetupGrid meetups={$meetups} on:show-details="{showDetails}" on:edit-meetup="{onEditMeetup}"
+        on:add-meetup="{() => editMode = 'edit'}"/>
+    {/if}
   {:else}
     <MeetupDetail id="{pageData.id}" on:close-details="{closeDetails}" />
   {/if}
