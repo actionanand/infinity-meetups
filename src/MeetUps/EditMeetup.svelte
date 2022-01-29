@@ -94,7 +94,16 @@
   }
 
   function onDeleteMeetup() {
-    meetups.deleteMeetup(id);
+    fetch(`https://vue-http-exmp-default-rtdb.firebaseio.com/meetups/${id}.json`, {
+        method: 'DELETE'
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error deleting meetup!');
+        }
+        meetups.deleteMeetup(id);
+      }).catch(err => {
+        console.log(err);
+      });
     dispatch('save-form-data');
   }
 </script>

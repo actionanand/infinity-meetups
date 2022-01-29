@@ -18,7 +18,20 @@
   const dispatch = createEventDispatcher();
 
   function onToggleFavorite() {
-    meetups.toggleFavorite(id);
+    fetch(`https://vue-http-exmp-default-rtdb.firebaseio.com/meetups/${id}.json`, {
+        method: 'PATCH',
+        body: JSON.stringify({ isFavorite: !isFav}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error changing favorite status!');
+        }
+        meetups.toggleFavorite(id);
+      }).catch(err => {
+        console.log(err);
+      });
   }
 </script>
 
