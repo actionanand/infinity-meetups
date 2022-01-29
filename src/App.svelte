@@ -15,6 +15,24 @@
 
   // let meetups;
 
+  fetch('https://vue-http-exmp-default-rtdb.firebaseio.com/meetups.json').then(res => {
+    if(!res.ok) {
+      throw new Error('Error fetching meetup data');
+    }
+    return res.json();
+  }).then(data => {
+    const loadedMeetups = [];
+    for (const key in data) {
+      loadedMeetups.push({
+        ...data[key],
+        id: key
+      });
+    }
+    meetups.setMeetups(loadedMeetups);
+  }).catch(err => {
+    console.log(err.message);
+  });
+
   function onSaveMeetup() {
     editMode = null;
     editedId = null;
