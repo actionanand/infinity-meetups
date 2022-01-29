@@ -42,6 +42,10 @@
     unSub();
   }
 
+  function sendingErrorMsg(errorMsg) {
+    dispatch('error-modal', errorMsg)
+  }
+
   function submitForm() {
     const meetupData = {
       title,
@@ -61,11 +65,13 @@
         }
       }).then(res => {
         if(!res.ok) {
-          throw new Error('Error saving meetup!');
+          throw new Error('Error editting meetup!');
         }
+        console.log('Meetup editted');
         meetups.updateMeetup(id, meetupData);
       }).catch(err => {
-        console.log(err);
+        sendingErrorMsg(err.message);
+        // console.log(err.message);
       });
     } else {
       fetch('https://vue-http-exmp-default-rtdb.firebaseio.com/meetups.json', {
@@ -83,7 +89,8 @@
         console.log('Meetup added :', data);
         meetups.addMeetup({...meetupData, isFavorite: false, id: data.name});
       }).catch(err => {
-        console.log(err);
+        sendingErrorMsg(err.message);
+        // console.log(err);
       });
     }
     dispatch('save-form-data');
@@ -102,7 +109,8 @@
         }
         meetups.deleteMeetup(id);
       }).catch(err => {
-        console.log(err);
+        // console.log(err);
+        sendingErrorMsg(err.message);
       });
     dispatch('save-form-data');
   }

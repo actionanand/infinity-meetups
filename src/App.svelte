@@ -6,6 +6,7 @@
   import EditMeetup from './MeetUps/EditMeetup.svelte';
   import MeetupDetail from './MeetUps/MeetupDetail.svelte';
   import LoadingSpinner from './UI/LoadingSpinner.svelte';
+  import Error from './UI/Error.svelte';
 
   export let appName;
 
@@ -14,6 +15,7 @@
   let pageData = {};
   let editedId = null;
   let isLoading = true;
+  let isError = null;
 
   // let meetups;
 
@@ -30,11 +32,13 @@
         id: key
       });
     }
+    isError = null;
     isLoading = false;
     meetups.setMeetups(loadedMeetups.reverse());
   }).catch(err => {
+    isError = err;
     isLoading = false;
-    console.log(err.message);
+    // console.log(err.message);
   });
 
   function onSaveMeetup() {
@@ -61,6 +65,11 @@
     editMode = 'edit';
     editedId = event.detail;
   }
+
+  function onErrorEditPage(event) {
+    isError = {};
+    isError.message = event.detail;
+  }
 </script>
 
 <style>
@@ -70,11 +79,15 @@
 
 </style>
 
+{#if isError}
+  <Error message="{isError.message}" on:cancel="{() => isError = null}" />
+{/if}
 <Header {appName} />
 <main>
   {#if page==='overview'}
     {#if editMode === 'edit'}
-      <EditMeetup id={editedId} on:save-form-data={onSaveMeetup} on:cancel="{cancelEdit}" />
+      <EditMeetup id={editedId} on:save-form-data={onSaveMeetup} on:cancel="{cancelEdit}"
+      on:error-modal="{onErrorEditPage}" />
     {/if}
     
     {#if isLoading}
