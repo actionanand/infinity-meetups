@@ -55,7 +55,23 @@
     if(id) {
       meetups.updateMeetup(id, meetupData);
     } else {
-      meetups.addMeetup(meetupData);
+      fetch('https://vue-http-exmp-default-rtdb.firebaseio.com/meetups.json', {
+        method: 'POST',
+        body: JSON.stringify({...meetupData, isFavorite: false}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        if(!res.ok) {
+          throw new Error('Error saving meetup!');
+        }
+        return res.json();
+      }).then(data => {
+        console.log('Meetup added :', data);
+        meetups.addMeetup({...meetupData, isFavorite: false, id: data.name});
+      }).catch(err => {
+        console.log(err);
+      });
     }
     dispatch('save-form-data');
   }
